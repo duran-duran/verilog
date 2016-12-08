@@ -1,14 +1,14 @@
 module op_aut (
-    input clock, reset,
-    input rd_mux_s,
-    input write,
-    input op2_mux_s,
-    input[5:0] alu_funct,
-    input branch_mux_s,
-    output[5:0] opcode,
-    output[5:0] funct,
-    output zero
-  );
+  input clock, reset,
+  input rd_mux_s,
+  input write,
+  input op2_mux_s,
+  input[5:0] alu_funct,
+  input branch_mux_s,
+  output[5:0] opcode,
+  output[5:0] funct,
+  output zero
+);
 
   wire[31:0] pc_out, pc_adder_out,
              instruction;
@@ -34,7 +34,7 @@ module op_aut (
   assign imm = instruction[15:0];
   assign j_imm = instruction[25:0];
 
-  mux2 #(.Width(5)) rd_mx(.i0(rt), .i1(rd), .s(rd_mux_s), .o(rd_mux_out));
+  mux2 #(.Width(5)) rd_mux(.i0(rt), .i1(rd), .s(rd_mux_s), .o(rd_mux_out));
 
   register_file regs(.raddr1(rs), .raddr2(rt), .waddr(rd_mux_out), .wdata(alu_result),
                      .write(write), .clock(clock), .reset(reset),
