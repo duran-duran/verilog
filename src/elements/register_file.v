@@ -5,7 +5,7 @@
 // по сигналу reset немедленно все регистры сбрасываются в 0
 // если write = 1, то по переднему фронту clock'а в регистр rk, k = waddr[2:0] записывается значение wdata
 module register_file
-  ( input [5:0] raddr1, raddr2, waddr,
+  ( input [4:0] raddr1, raddr2, waddr,
     input [31:0] wdata,
     input write, clock, reset,
     output [31:0] rdata1, rdata2
