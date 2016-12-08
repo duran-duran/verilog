@@ -3,6 +3,7 @@ module op_aut (
     input rd_mux_s,
     input write,
     input op2_mux_s,
+    input[5:0] alu_funct,
     output[5:0] opcode,
     output[5:0] funct,
     output zero
@@ -14,7 +15,7 @@ module op_aut (
   wire[15:0] imm;
   wire[25:0] j_imm;
 
-  wire[31:0] rdata1, rdata2, imm_data, alu_result;
+  wire[31:0] rdata1, rdata2, imm_data, op2_data, alu_result;
 
   register pc(.in(pc_adder_out), .out(pc_out), .load(1'b1), .clock(clock), .reset(reset));
   adder pc_adder(.in1(pc_out), .in2(32'h04), .out(pc_adder_out));
@@ -36,6 +37,9 @@ module op_aut (
                      .write(write), .clock(clock), .reset(reset),
                      .rdata1(rdata1), .rdata2(rdata2));
 
+  ext16to32 imm_ext(.in(imm), .out(imm_data));
+  mux2 op2_mux(.i0(rdata2), .i1(imm_data), .s(op2_mux_s), .o(op2_data));
 
+  alu alu_inst(.in1(rdata1), .in2(op2_data), .aluop(alu_funct), .out(alu_result), .zero(zero));
 endmodule
 
