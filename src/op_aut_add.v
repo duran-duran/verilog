@@ -4,6 +4,7 @@ module op_aut (
     input write,
     input op2_mux_s,
     input[5:0] alu_funct,
+    input branch_mux_s,
     output[5:0] opcode,
     output[5:0] funct,
     output zero
@@ -17,7 +18,9 @@ module op_aut (
 
   wire[31:0] rdata1, rdata2, imm_data, op2_data, alu_result;
 
-  register pc(.in(pc_adder_out), .out(pc_out), .load(1'b1), .clock(clock), .reset(reset));
+  wire[31:0] branch_adder_out, branch_result, new_pc;
+
+  register pc(.in(new_pc), .out(pc_out), .load(1'b1), .clock(clock), .reset(reset));
   adder pc_adder(.in1(pc_out), .in2(32'h04), .out(pc_adder_out));
   instruction_memory ins_mem(.sel(pc_out), .out(instruction));
 
@@ -41,5 +44,8 @@ module op_aut (
   mux2 op2_mux(.i0(rdata2), .i1(imm_data), .s(op2_mux_s), .o(op2_data));
 
   alu alu_inst(.in1(rdata1), .in2(op2_data), .aluop(alu_funct), .out(alu_result), .zero(zero));
+
+  adder branch_adder(.in1(pc_adder_out), .in2(imm_data), .out(branch_adder_out));
+  mux2 branch_mux(.i0(pc_adder_out), .i1(branch_adder_out), .s(branch_mux_s), .o(new_pc));
 endmodule
 
