@@ -16,7 +16,7 @@ module op_aut (
   wire[15:0] imm;
   wire[25:0] j_imm;
 
-  wire[31:0] rdata1, rdata2, imm_data, op2_data, alu_result;
+  wire[31:0] rdata1, rdata2, imm_data, imm_shifted, op2_data, alu_result;
 
   wire[31:0] branch_adder_out, branch_result, new_pc;
 
@@ -45,7 +45,8 @@ module op_aut (
 
   alu alu_inst(.in1(rdata1), .in2(op2_data), .aluop(alu_funct), .out(alu_result), .zero(zero));
 
-  adder branch_adder(.in1(pc_adder_out), .in2(imm_data), .out(branch_adder_out));
+  left_shifter imm_shifter(.in(imm_data), .shamt(5'b00010), .out(imm_shifted));
+  adder branch_adder(.in1(pc_adder_out), .in2(imm_shifted), .out(branch_adder_out));
   mux2 branch_mux(.i0(pc_adder_out), .i1(branch_adder_out), .s(branch_mux_s), .o(new_pc));
 endmodule
 
