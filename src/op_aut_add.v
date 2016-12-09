@@ -1,5 +1,6 @@
 module op_aut (
-  input clock, load, reset,
+  input clock, reset,
+  input pc_load,
   input rd_mux_s,
   input write,
   input op2_mux_s,
@@ -24,7 +25,7 @@ module op_aut (
   wire[31:0] new_pc;
 
 
-  register pc(.in(new_pc), .out(pc_out), .load(load), .clock(clock), .reset(reset));
+  register pc(.in(new_pc), .out(pc_out), .load(pc_load), .clock(clock), .reset(reset));
   adder pc_adder(.in1(pc_out), .in2(32'h04), .out(pc_adder_out));
   instruction_memory ins_mem(.sel(pc_out), .out(instruction));
 

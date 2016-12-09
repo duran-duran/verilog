@@ -1,19 +1,20 @@
 module testbench;
+  reg clock, reset;
 
-  reg clock, load, reset;
-
+  wire pc_load;
   wire write;
   wire[5:0] opcode, funct, alu_funct;
   wire rd_mux_s, op2_mux_s, branch_mux_s, j_mux_s;
   wire zero;
 
-  op_aut op_aut_inst(.clock(clock), .load(load), .reset(reset),
+  op_aut op_aut_inst(.clock(clock), .reset(reset), .pc_load(pc_load),
                      .rd_mux_s(rd_mux_s), .write(write), .op2_mux_s(op2_mux_s),
                      .alu_funct(alu_funct), .branch_mux_s(branch_mux_s), .j_mux_s(j_mux_s),
                      .opcode(opcode), .funct(funct), .zero(zero));
 
-  fsm fsm_inst(.opcode(opcode), .funct(funct), .zero(zero),
-               .write(write), .alu_funct(alu_funct),
+  fsm fsm_inst(.clock(clock), .reset(reset),
+               .opcode(opcode), .funct(funct), .zero(zero),
+               .pc_load(pc_load), .write(write), .alu_funct(alu_funct),
                .rd_mux_s(rd_mux_s), .op2_mux_s(op2_mux_s), .branch_mux_s(branch_mux_s), .j_mux_s(j_mux_s));
 
   initial clock = 0;
@@ -31,12 +32,7 @@ module testbench;
     reset = 1;
     #1
     reset = 0;
-    #1
-    load = 1;
-    #10
-    load = 0;
-    #1
+    #100
     $finish; // закончить симуляцию
   end
-
 endmodule

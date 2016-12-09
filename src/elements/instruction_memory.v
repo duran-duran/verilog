@@ -60,8 +60,8 @@ module instruction_memory
     32'd4 : out = {OP_ADDI, R01, R01, 16'd4}; // $1 = $1 + 4
     32'd8 : out = {OP_R, R00, R01, R02, ZERO_SHAMT, OPR_ADD}; // $2 = $1 + $0
     32'd12 : out = {OP_R, R00, R01, R03, ZERO_SHAMT, OPR_ADD}; // $3 = $1 + $0
-    32'd16 : out = {OP_J, 26'd1}; //jump to 1st instruction
-    //32'd16 : out = {OP_BEQ, R02, R03, -16'd3}; // if($2 == $3) jump to (16 + 4 + 4 * (-3)) = 8
+    32'd16 : out = {OP_J, 26'd6}; //jump to address 6 x 4 = 24 instruction
+    32'd24 : out = {OP_BEQ, R02, R03, -16'd3}; // if($2 == $3) jump to (24 + 4 + 4 * (-3)) = 16
     default: out = 0;
   endcase
 endmodule
