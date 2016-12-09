@@ -14,6 +14,7 @@ module instruction_memory
   parameter OP_BNE = 6'b000101;
   parameter OP_LW = 6'b100011;
   parameter OP_SW = 6'b101011;
+  parameter OP_J = 6'b000010;
   
   parameter OPR_ADD = 6'b100000;
   parameter OPR_SUB = 6'b100010;
@@ -59,7 +60,8 @@ module instruction_memory
     32'd4 : out = {OP_ADDI, R01, R01, 16'd4}; // $1 = $1 + 4
     32'd8 : out = {OP_R, R00, R01, R02, ZERO_SHAMT, OPR_ADD}; // $2 = $1 + $0
     32'd12 : out = {OP_R, R00, R01, R03, ZERO_SHAMT, OPR_ADD}; // $3 = $1 + $0
-    32'd16 : out = {OP_BEQ, R02, R03, -16'd3}; // if($2 == $3) jump to (16 + 4 + 4 * (-3)) = 8
+    32'd16 : out = {OP_J, 26'd1}; //jump to 1st instruction
+    //32'd16 : out = {OP_BEQ, R02, R03, -16'd3}; // if($2 == $3) jump to (16 + 4 + 4 * (-3)) = 8
     default: out = 0;
   endcase
 endmodule
